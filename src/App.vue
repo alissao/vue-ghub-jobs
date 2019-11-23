@@ -12,13 +12,13 @@
       <form>
 
           <label>Job Description</label>
-          <input type="text" placeholder="Job Description">
+          <input type="text" placeholder="Job Description" v-model="search.description">
           <label>Location</label>
-          <input type="text" placeholder="Location">
+          <input type="text" placeholder="Location" v-model="search.location">
           <label>Full Time</label>
           <p>
             <label>
-              <input class="with-gap" name="Full time" type="radio" checked />
+              <input class="with-gap" name="Full time" type="radio" checked v-model="search.full_time"/>
               <span>Yes</span>
             </label>
             <label>
@@ -27,22 +27,26 @@
             </label>
           </p>
 
-          <button class="waves-effect waves-light btn-small">Pesquisar<i class="material-icons left">search</i></button>
+          <button @click="listar(1, search.description, search.local, search.full_time)" class="waves-effect waves-light btn-small">Search<i class="material-icons left">search</i></button>
 
       </form>
 
       <div class="row">
         <div class="col s4" v-for="job in jobs" :key="job.id">
-          <!--h5 style="text-align: center">{{ job.title }}</h5-->
           <div class="card blue-grey darken-1">
             <div class="card-content white-text">
               <img align="right" height="50" width="100" v-bind:src="job.company_logo" />
               <span class="card-title">{{ job.title }}</span>
-              {{ job.description }}
+              <a>{{ job.location }}</a>
+              <p>{{  job.type }}</p>
+              <div class="wrap">
+                <div class="show" v-html="job.description"></div>
+                <div class="noshow" v-html="job.description"></div>
+              </div>
             </div>
             <div class="card-action">
-              <a href="#">This is a link</a>
-              <a href="#">This is a link</a>
+              <p style="width:80% height:15%" v-html="job.how_to_apply"></p>
+              <a v-bind:href="job.company_url">Company's site</a>
             </div>
           </div>
         </div>
@@ -85,7 +89,12 @@ export default {
         how_to_apply: '',
         company_logo: ''
       },
-      jobs: []
+      jobs: [],
+      search:{
+        description: '',
+        location: '',
+        full_time: ''
+      }
     }
   },
 
@@ -112,5 +121,16 @@ export default {
     width: 1170px;
     margin: 10 auto;
   }
+}
+
+.wrap {
+    outline: 1px;
+    height: 300px;
+}
+.noshow, .wrap:hover .show {
+    display: none;
+}
+.wrap:hover .noshow {
+    display: inline;
 }
 </style>
